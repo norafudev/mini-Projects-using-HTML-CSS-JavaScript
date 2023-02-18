@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Muli&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #f6f7fb;
+    font-family: 'Muli', sans-serif;
+}
+
+.container {
+    text-align: center;
+}
+
+.progress-container {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    max-width: 100%;
+    /* 未超出父元素宽度则大小不变， 超过了则收缩至父元素的宽度 */
+    width: 350px;
+    margin-bottom: 30px;
+}
+
+/* .progress-line进度条蓝线;
+   .progress-container::before进度条灰线 */
+.progress-line,
+.progress-container::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 4px;
+    transition: .4s ease;
+}
+
+.progress-line {
+    width: 0%;
+    /* 用父盒子宽度的 %，控制进度长短 */
+    background-color: #3498db;
+    z-index: 0;
+}
+
+.progress-container::before {
+    width: 100%;
+    background-color: #e0e0e0;
+    z-index: -1;
+}
+
+.circle {
+    /* 让子元素垂直居中对齐 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border: 3px solid #e0e0e0;
+    border-radius: 50%;
+    background-color: #fff;
+    color: #999;
+    z-index: 1;
+    transition: all .4s ease
+}
+
+.circle.active {
+    border-color: #3498db;
+}
+
+.btn {
+    margin: 5px;
+    padding: 8px 30px;
+    border: 0;
+    border-radius: 6px;
+    background: #3498db;
+    font-size: 14px;
+    color: #fff;
+    cursor: pointer;
+}
+
+/* 点击按钮时缩小 */
+.btn:active {
+    transform: scale(0.98)
+}
+
+/* :disabled伪类表示被禁用的元素 */
+.btn:disabled {
+    background-color: #e0e0e0;
+    cursor: not-allowed;
+}
+
+.btn:focus {
+    outline: 0;
+}
