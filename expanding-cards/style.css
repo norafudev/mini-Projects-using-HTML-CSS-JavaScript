@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css?family=Muli&display=swap');
+
+* {
+    box-sizing: border-box;
+    /* padding和border的值就不会在影响元素的宽高 */
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Muli', sans-serif;
+}
+
+.container {
+    display: flex;
+    width: 90vw;
+}
+
+.panel {
+    position: relative;
+    height: 80vh;
+    margin: 10px;
+    background: no-repeat center/cover;
+    border-radius: 50px;
+    flex: 0.5;
+    /* 让项目一样宽 */
+    cursor: pointer;
+    transition: all .7s ease-in;
+    /* 切换图片的速度先慢后快 */
+}
+
+.panel h3 {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    font-size: 24px;
+    color: #fff;
+    opacity: 0;
+    /* 添加delay属性，等到图片完全展开再显示标题 */
+}
+
+.panel.active {
+    /* 注意：并集选择器中间没有空格 */
+    flex: 5;
+}
+
+.panel.active h3 {
+    opacity: 0.8;
+    transition: opacity 0.3s ease-in 0.4s;
+}
