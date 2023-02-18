@@ -1,0 +1,24 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  /* 将元素放在视口的中心 */
+  flex-direction: column;
+  /* 盒子沿垂直方向排列（主轴） */
+  align-items: center;
+  /* 水平方向居中 */
+  justify-content: center;
+  /* 在主轴方向上居中 */
+  height: 100vh;
+  /* 需要给弹性盒设置高度（vh：相对视口高度）才能垂直居中 */
+  overflow: hidden;
+  /* 不显示滚动条 */
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+}
