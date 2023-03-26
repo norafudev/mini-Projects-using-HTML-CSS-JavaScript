@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="http://at.alicdn.com/t/c/font_3866112_re6x3dmlgvb.css">
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    .outer {
+        position: relative;
+        width: 640px;
+        height: 390px;
+        margin: 100px auto;
+    }
+
+    .img-list li {
+        /* 让图片重叠 */
+        position: absolute;
+        list-style: none;
+        opacity: 0;
+        transition: opacity 1s;
+    }
+
+    img {
+        /* 去除图片之间的间隙 */
+        vertical-align: top;
+    }
+
+    /* 注意选择器权重，不要被.img-list li盖住 */
+    .img-list .current {
+        /* 给想置顶的图片加权重，否则就是ul中的最后一张图片在上面 */
+        z-index: 1;
+        opacity: 1;
+    }
+
+    .iconfont {
+        /* 相对位置给outer盒子设置 */
+        position: absolute;
+        top: 50%;
+        transform: translate(0, -50%);
+        font-size: 50px;
+        font-weight: bold;
+        color: #fff;
+        z-index: 2;
+        opacity: 0.7;
+        transition: all .2s;
+    }
+
+    .iconfont:hover {
+        opacity: 1;
+    }
+
+    .icon-back {
+        left: 2px;
+    }
+
+    .icon-more {
+        right: 2px;
+    }
+
+    .pagination {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 3;
+    }
+
+    .pagination a {
+        position: relative;
+        display: inline-block;
+        margin: 5px;
+        border-radius: 50%;
+        width: 15px;
+        height: 15px;
+        background-color: #fff;
+        opacity: 0.6;
+        transition: all .4s;
+    }
+
+    .pagination .active {
+        opacity: 1;
+    }
+</style>
+
+<body>
+    <div class="outer">
+        <ul class="img-list">
+            <li class="current">
+                <a href="#">
+                    <img src="./images/1.png">
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <img src="./images/2.png">
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <img src="./images/3.png">
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <img src="./images/4.png">
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <img src="./images/5.png">
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <img src="./images/6.png">
+                </a>
+            </li>
+        </ul>
+
+        <div class="prev-next">
+            <a id="prev_btn" href="javascript:;">
+                <i class="iconfont icon-back"></i>
+            </a>
+            <a id="next_btn" href="javascript:;">
+                <i class="iconfont icon-more"></i>
+            </a>
+        </div>
+
+        <div class="pagination">
+            <a class="active" href="javascript:;"></a>
+            <a href="javascript:;"></a>
+            <a href="javascript:;"></a>
+            <a href="javascript:;"></a>
+            <a href="javascript:;"></a>
+            <a href="javascript:;"></a>
+        </div>
+
+    </div>
+
+    <script>
+        const imgArr = Array.from(document.getElementsByTagName("li"))
+        const dotsArr = Array.from(document.querySelectorAll(".pagination a"))
+
+        //事件委派，给document绑定事件:鼠标点击增加active类
+        document.addEventListener("click", () => {
+            //判断触发事件的对象是不是小点，是则返回索引，否则返回-1
+            let index = dotsArr.indexOf(event.target)
+            if (index != -1) {
+                changeImg(index)
+            }
+        })
+
+        const toggleChange = (function () {
+            let timer = null
+            //内部函数要作为返回值返回，才能在外部接收，调用
+            return () => {
+                if (timer === null) { //如果当前没有定时器，就开启
+                    timer = setTimeout(function auto() {
+                        changeImg("next")
+                        timer = setTimeout(auto, 3000)
+                    }, 3000)
+                } else { //如果当前有定时器，就关闭，注意关闭后，要重设timer = null
+                    clearTimeout(timer)
+                    timer = null
+                }
+            }
+        })()
+
+        toggleChange()
+
+        //获取outer大盒子
+        const outer = document.querySelector(".outer")
+        //给鼠标进入和离开事件绑定响应函数
+        outer.onmouseenter = toggleChange
+        outer.onmouseleave = toggleChange
+
+        //获取按钮,绑定事件
+        const prev_btn = document.getElementById("prev_btn")
+        const next_btn = document.getElementById("next_btn")
+
+        prev_btn.onclick = function () {
+            changeImg("prev")
+        }
+
+        next_btn.onclick = function () {
+            changeImg("next")
+        }
+
+        function changeImg(dir) {
+            //获取当前显示的图片
+            const current = document.querySelector(".img-list .current")
+
+            //获取下一个图片
+            let next
+            if (dir === "next") {
+                next = current.nextElementSibling || imgArr[0]
+            } else if (dir === "prev") {
+                next = current.previousElementSibling || imgArr[imgArr.length - 1]
+            } else if (typeof dir === "number") {//点击原点，切换图片
+                next = imgArr[dir]
+            }
+
+            //切换显示状态
+            current.classList.remove("current")
+            next.classList.add("current")
+
+            //切换active
+
+            //获取当前要显示的小点
+            const currentActive = document.querySelector(".pagination .active")
+
+            //获取下个要显示的图片索引，进而获取下一个要active的小点
+            const index = imgArr.indexOf(next)
+            const nextActive = dotsArr[index]
+
+            currentActive.classList.remove("active")
+            nextActive.classList.add("active")
+
+        }
+    </script>
+</body>
+
+</html>
